@@ -43,14 +43,34 @@ class HostsUpdater:
                 'description': '中文广告域名屏蔽'
             },
             {
-                'name': 'notracking/hosts-blocklists',
-                'url': 'https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt',
-                'description': '追踪器屏蔽列表'
+                'name': 'EasyList China',
+                'url': 'https://easylist-downloads.adblockplus.org/easylistchina.txt',
+                'description': 'EasyList 中国补充规则'
             },
             {
-                'name': 'Goooler/1024_hosts',
-                'url': 'https://raw.githubusercontent.com/Goooler/1024_hosts/master/hosts',
-                'description': '中文广告屏蔽规则'
+                'name': 'ChinaList AD',
+                'url': 'https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjx-annoyance.txt',
+                'description': '中文网站广告过滤规则'
+            },
+            {
+                'name': 'ADgk',
+                'url': 'https://raw.githubusercontent.com/banbendalao/ADgk/master/ADgk.txt',
+                'description': '中文广告过滤规则'
+            },
+            {
+                'name': 'Halflife/list',
+                'url': 'https://raw.githubusercontent.com/halflife3/list/master/ad.txt',
+                'description': '中文广告域名列表'
+            },
+            {
+                'name': 'jdlingyu/ad-wars',
+                'url': 'https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts',
+                'description': '中文广告拦截规则'
+            },
+            {
+                'name': 'neoFelhz/neohosts',
+                'url': 'https://raw.githubusercontent.com/neoFelhz/neohosts/gh-pages/127.0.0.1/full/hosts',
+                'description': '自由·负责·克制 去广告 Hosts'
             }
         ]
         
@@ -112,11 +132,26 @@ class HostsUpdater:
         if re.match(r'^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', line):
             return self.validate_domain(line)
         
-        # Adblock 格式: ||domain.com^
-        adblock_match = re.match(r'^\|\|(.+?)\^?$', line)
+        # Adblock 格式: ||domain.com^ 或 ||domain.com
+        adblock_match = re.match(r'^\|\|(.+?)[\^$]*$', line)
         if adblock_match:
             domain = adblock_match.group(1)
+            # 移除路径部分，只保留域名
+            domain = domain.split('/')[0]
             return self.validate_domain(domain)
+        
+        # EasyList 格式处理更多情况
+        # 处理 @@||domain.com^ (白名单，跳过)
+        if line.startswith('@@'):
+            return None
+            
+        # 处理 domain.com## (元素隐藏规则，跳过)
+        if '##' in line or '#@#' in line:
+            return None
+            
+        # 处理 /regex/ 格式 (跳过正则表达式)
+        if line.startswith('/') and line.endswith('/'):
+            return None
         
         return None
 
@@ -167,8 +202,8 @@ class HostsUpdater:
 
     def generate_hosts_file(self) -> str:
         """生成 hosts 文件内容"""
-        header = f"""# Hosts Ad Blocker Rules
-# 自动生成的广告屏蔽规则文件
+        header = f"""# Hosts Ad Blocker Rules (Chinese Enhanced)
+# 自动生成的广告屏蔽规则文件 (中文增强版)
 # 更新时间: {self.stats['update_time']}
 # 规则来源: {self.stats['successful_sources']}/{self.stats['total_sources']} 个源
 # 屏蔽域名: {self.stats['unique_domains']} 个
@@ -196,7 +231,7 @@ class HostsUpdater:
 fe80::1%lo0 localhost
 
 # ============================================================
-# 广告和恶意软件屏蔽规则
+# 广告和恶意软件屏蔽规则 (中文增强版)
 # ============================================================
 
 """
@@ -227,7 +262,7 @@ fe80::1%lo0 localhost
 
     def save_stats(self):
         """保存更新统计信息"""
-        stats_content = f"""# Hosts Ad Blocker 更新统计
+        stats_content = f"""# Hosts Ad Blocker 更新统计 (中文增强版)
 
 **最后更新时间**: {self.stats['update_time']}
 
