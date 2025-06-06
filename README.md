@@ -16,8 +16,6 @@
 - 📊 **统计信息**: 详细的更新日志和统计
 - 🚀 **即用即得**: 直接下载使用，无需配置
 
-
-
 ## 📊 规则来源
 
 本项目整合以下优质来源的规则，**特别加强了中文规则覆盖**：
@@ -29,10 +27,6 @@
 | [privacy-protection-tools/anti-AD](https://github.com/privacy-protection-tools/anti-AD) | 中文广告域名屏蔽 | 🇨🇳 中文 | 每日 |
 | [EasyList China](https://easylist.to/) | EasyList 中国补充规则 | 🇨🇳 中文 | 每日 |
 | [ChinaList AD](https://github.com/cjx82630/cjxlist) | 中文网站广告过滤规则 | 🇨🇳 中文 | 每周 |
-| [ADgk](https://github.com/banbendalao/ADgk) | 中文广告过滤规则 | 🇨🇳 中文 | 每日 |
-| [Halflife/list](https://github.com/halflife3/list) | 中文广告域名列表 | 🇨🇳 中文 | 每周 |
-| [jdlingyu/ad-wars](https://github.com/jdlingyu/ad-wars) | 中文广告拦截规则 | 🇨🇳 中文 | 每日 |
-| [neoFelhz/neohosts](https://github.com/neoFelhz/neohosts) | 自由·负责·克制 去广告 Hosts | 🇨🇳 中文 | 每日 |
 
 ## 🔧 高级功能
 
@@ -50,9 +44,9 @@
 
 ## 📈 统计信息
 
-- **屏蔽域名数量**: 通常包含 100,000+ 个域名
+- **屏蔽域名数量**: 通常包含 80,000+ 个域名
 - **更新频率**: 每12小时自动更新
-- **中文规则占比**: 约40%，专门针对中文网站优化
+- **中文规则占比**: 约30%，专门针对中文网站优化
 - **去重效率**: 平均去重率 15-20%
 
 ## 🛠️ 本地运行
@@ -71,8 +65,6 @@ pip install requests
 python main.py
 ```
 
-
-
 ## 📜 开源协议
 
 本项目采用 [MIT License](LICENSE) 开源协议。
@@ -89,5 +81,8 @@ python main.py
 
 ---
 
+⭐ 如果这个项目对您有帮助，请给它一个 Star！
 
-🔄 **最新更新**: 现已支持9个优质规则源，专门优化中文网站广告屏蔽效果！
+💬 有问题或建议？欢迎提交 [Issue](https://github.com/your-username/hosts-ad-blocker/issues)！
+
+🔄 **最新更新**: 现已支持5个优质规则源，专门优化中文网站广告屏蔽效果！
