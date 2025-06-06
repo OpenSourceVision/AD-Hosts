@@ -89,8 +89,5 @@ python main.py
 
 ---
 
-⭐ 如果这个项目对您有帮助，请给它一个 Star！
-
-💬 有问题或建议？欢迎提交 [Issue](https://github.com/your-username/hosts-ad-blocker/issues)！
 
 🔄 **最新更新**: 现已支持9个优质规则源，专门优化中文网站广告屏蔽效果！
