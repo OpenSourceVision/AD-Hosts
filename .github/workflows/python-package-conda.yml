@@ -1,34 +1,147 @@
-name: Python Package using Conda
+name: Update Hosts Rules
 
-on: [push]
+on:
+  schedule:
+    # 每12小时运行一次 (UTC时间: 00:00 和 12:00)
+    - cron: '0 0,12 * * *'
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # 允许手动触发
 
 jobs:
-  build-linux:
+  update-hosts:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 5
-
+    
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
+    
     - name: Install dependencies
       run: |
-        conda env update --file environment.yml --name base
-    - name: Lint with flake8
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Update hosts rules
       run: |
-        conda install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+        python main.py
+    
+    - name: Check for changes
+      id: changes
       run: |
-        conda install pytest
-        pytest
+        git add -A
+        if git diff --staged --quiet; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "📝 没有检测到规则变化"
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "✅ 检测到规则更新"
+        fi
+    
+    - name: Get stats
+      id: stats
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        if [ -f "README_STATS.md" ]; then
+          DOMAIN_COUNT=$(grep -o "屏蔽域名数量.*个" README_STATS.md | grep -o "[0-9]*" || echo "未知")
+          SOURCE_COUNT=$(grep -o "规则源状态.*个源成功获取" README_STATS.md | head -1 | grep -o "[0-9]*/[0-9]*" || echo "未知")
+          echo "domain_count=$DOMAIN_COUNT" >> $GITHUB_OUTPUT
+          echo "source_count=$SOURCE_COUNT" >> $GITHUB_OUTPUT
+        else
+          echo "domain_count=未知" >> $GITHUB_OUTPUT
+          echo "source_count=未知" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Commit and push if changed
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git commit -m "🔄 自动更新 hosts 规则 - $(date '+%Y-%m-%d %H:%M:%S UTC')"
+        git push
+    
+    - name: Get current date
+      if: steps.changes.outputs.changed == 'true'
+      id: date
+      run: echo "date=$(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_OUTPUT
+    
+    - name: Create Release
+      if: steps.changes.outputs.changed == 'true'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: "Hosts Rules v${{ github.run_number }}"
+        body: |
+          🔄 **自动更新的 hosts 广告屏蔽规则**
+          
+          📅 **更新时间**: ${{ steps.date.outputs.date }}
+          📊 **屏蔽域名**: ${{ steps.stats.outputs.domain_count }} 个
+          📡 **规则源状态**: ${{ steps.stats.outputs.source_count }}
+          
+          ## 📁 下载文件
+          - [hosts](https://github.com/${{ github.repository }}/releases/download/v${{ github.run_number }}/hosts) - 主要规则文件
+          
+          ## 🛠 使用方法
+          
+          ### Windows
+          1. 以管理员身份运行记事本
+          2. 打开 `C:\Windows\System32\drivers\etc\hosts`
+          3. 将下载的内容追加到文件末尾
+          4. 保存后运行 `ipconfig /flushdns`
+          
+          ### Linux/macOS
+          ```bash
+          # 备份原文件
+          sudo cp /etc/hosts /etc/hosts.backup
+          
+          # 追加新规则
+          sudo cat hosts >> /etc/hosts
+          
+          # 刷新 DNS (macOS)
+          sudo dscacheutil -flushcache
+          
+          # 刷新 DNS (Linux)
+          sudo systemctl restart systemd-resolved
+          ```
+          
+          ## 📋 规则来源
+          - StevenBlack/hosts - 综合广告和恶意软件屏蔽
+          - AdguardTeam/AdguardFilters - Adguard 官方规则
+          - privacy-protection-tools/anti-AD - 中文广告屏蔽
+          - notracking/hosts-blocklists - 追踪器屏蔽
+          - Goooler/1024_hosts - 中文广告规则
+          
+          ---
+          
+          ⚠️ **注意**: 使用前请备份现有的 hosts 文件！
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      if: steps.changes.outputs.changed == 'true'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./hosts
+        asset_name: hosts
+        asset_content_type: text/plain
+    
+    - name: Update README badges
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        echo "✅ 规则更新完成！"
+        echo "📊 屏蔽域名: ${{ steps.stats.outputs.domain_count }} 个"
+        echo "📡 规则源: ${{ steps.stats.outputs.source_count }}"
