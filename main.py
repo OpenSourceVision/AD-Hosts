@@ -51,26 +51,6 @@ class HostsUpdater:
                 'name': 'ChinaList AD',
                 'url': 'https://raw.githubusercontent.com/cjx82630/cjxlist/master/cjx-annoyance.txt',
                 'description': '中文网站广告过滤规则'
-            },
-            {
-                'name': 'ADgk',
-                'url': 'https://raw.githubusercontent.com/banbendalao/ADgk/master/ADgk.txt',
-                'description': '中文广告过滤规则'
-            },
-            {
-                'name': 'Halflife/list',
-                'url': 'https://raw.githubusercontent.com/halflife3/list/master/ad.txt',
-                'description': '中文广告域名列表'
-            },
-            {
-                'name': 'jdlingyu/ad-wars',
-                'url': 'https://raw.githubusercontent.com/jdlingyu/ad-wars/master/hosts',
-                'description': '中文广告拦截规则'
-            },
-            {
-                'name': 'neoFelhz/neohosts',
-                'url': 'https://raw.githubusercontent.com/neoFelhz/neohosts/gh-pages/127.0.0.1/full/hosts',
-                'description': '自由·负责·克制 去广告 Hosts'
             }
         ]
         
