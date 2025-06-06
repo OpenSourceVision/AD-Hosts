@@ -21,7 +21,7 @@
 
 1. 前往 [Releases](https://github.com/your-username/hosts-ad-blocker/releases/latest) 页面
 2. 下载最新的 `hosts` 文件
-3. 按照下方的安装指南进行操作
+3. 替换系统中的 hosts 文件
 
 ### 方法二：使用原始链接
 
@@ -29,53 +29,6 @@
 # 下载最新版本
 curl -L https://github.com/your-username/hosts-ad-blocker/releases/latest/download/hosts -o hosts
 ```
-
-## 🛠 安装指南
-
-### Windows
-
-1. **备份现有文件**:
-   ```cmd
-   copy C:\Windows\System32\drivers\etc\hosts C:\Windows\System32\drivers\etc\hosts.backup
-   ```
-
-2. **以管理员身份运行记事本**，打开文件:
-   ```
-   C:\Windows\System32\drivers\etc\hosts
-   ```
-
-3. **将下载的内容追加**到现有 hosts 文件末尾
-
-4. **刷新 DNS 缓存**:
-   ```cmd
-   ipconfig /flushdns
-   ```
-
-### Linux / macOS
-
-1. **备份现有文件**:
-   ```bash
-   sudo cp /etc/hosts /etc/hosts.backup
-   ```
-
-2. **追加规则**:
-   ```bash
-   sudo cat hosts >> /etc/hosts
-   ```
-   
-   或者使用编辑器:
-   ```bash
-   sudo nano /etc/hosts
-   ```
-
-3. **刷新 DNS 缓存**:
-   ```bash
-   # macOS
-   sudo dscacheutil -flushcache
-   
-   # Linux (Ubuntu/Debian)
-   sudo systemctl restart systemd-resolved
-   ```
 
 ## 📊 规则来源
 
@@ -88,45 +41,6 @@ curl -L https://github.com/your-username/hosts-ad-blocker/releases/latest/downlo
 | [privacy-protection-tools/anti-AD](https://github.com/privacy-protection-tools/anti-AD) | 中文广告domain屏蔽 | 每日 |
 | [notracking/hosts-blocklists](https://github.com/notracking/hosts-blocklists) | 追踪器屏蔽列表 | 每周 |
 | [Goooler/1024_hosts](https://github.com/Goooler/1024_hosts) | 中文广告屏蔽规则 | 每日 |
-
-## 🔧 本地运行
-
-如果您想在本地运行此项目：
-
-```bash
-# 克隆仓库
-git clone https://github.com/your-username/hosts-ad-blocker.git
-cd hosts-ad-blocker
-
-# 安装依赖
-pip install requests
-
-# 运行更新脚本
-python main.py
-```
-
-## 📈 更新日志
-
-- 查看 [更新统计](README_STATS.md) 了解最新的规则数量和来源状态
-- 查看 [Releases](https://github.com/your-username/hosts-ad-blocker/releases) 了解历史版本
-- 查看 [Actions](https://github.com/your-username/hosts-ad-blocker/actions) 了解自动更新状态
-
-## ⚠️ 注意事项
-
-- 使用前请**务必备份**现有的 hosts 文件
-- 部分网站可能因为屏蔽规则而无法正常访问，属于正常现象
-- 如果遇到访问问题，可以临时注释掉相关行进行测试
-- 建议定期检查更新以获取最新的屏蔽规则
-
-## 🤝 贡献
-
-欢迎贡献代码或建议！
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
 
 ## 📜 开源协议
 
