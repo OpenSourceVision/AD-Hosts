@@ -1,0 +1,88 @@
+name: Update Hosts Rules
+
+on:
+  schedule:
+    # 每12小时运行一次 (UTC时间: 00:00 和 12:00)
+    - cron: '0 0,12 * * *'
+  push:
+    branches: [ main ]
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  update-hosts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+    
+    - name: Update hosts rules
+      run: |
+        python main.py
+    
+    - name: Check for changes
+      id: changes
+      run: |
+        if git diff --quiet; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Commit and push if changed
+      if: steps.changes.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -m "🔄 自动更新 hosts 规则 - $(date '+%Y-%m-%d %H:%M:%S')"
+        git push
+    
+    - name: Create Release
+      if: steps.changes.outputs.changed == 'true'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Hosts Rules v${{ github.run_number }}
+        body: |
+          🔄 自动更新的 hosts 广告屏蔽规则
+          
+          📅 更新时间: $(date '+%Y-%m-%d %H:%M:%S')
+          
+          📁 下载文件:
+          - [hosts](https://github.com/${{ github.repository }}/releases/download/v${{ github.run_number }}/hosts) - 主要规则文件
+          
+          ## 使用方法
+          1. 下载 `hosts` 文件
+          2. 备份现有的系统 hosts 文件
+          3. 替换或合并到系统 hosts 文件中
+             - Windows: `C:\Windows\System32\drivers\etc\hosts`
+             - Linux/macOS: `/etc/hosts`
+          4. 刷新 DNS 缓存
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Asset
+      if: steps.changes.outputs.changed == 'true'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./hosts
+        asset_name: hosts
+        asset_content_type: text/plain
