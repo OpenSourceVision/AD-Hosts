@@ -1,8 +1,8 @@
 # Hosts Ad Blocker 🚫🔒
 
-[![更新状态](https://github.com/your-username/hosts-ad-blocker/workflows/Update%20Hosts%20Rules/badge.svg)](https://github.com/your-username/hosts-ad-blocker/actions)
-[![最新版本](https://img.shields.io/github/v/release/your-username/hosts-ad-blocker)](https://github.com/your-username/hosts-ad-blocker/releases/latest)
-[![下载次数](https://img.shields.io/github/downloads/your-username/hosts-ad-blocker/total)](https://github.com/your-username/hosts-ad-blocker/releases)
+[![更新状态](https://github.com/OpenSourceVision/hosts-ad-blocker/workflows/Update%20Hosts%20Rules/badge.svg)](https://github.com/OpenSourceVision/hosts-ad-blocker/actions)
+[![最新版本](https://img.shields.io/github/v/release/OpenSourceVision/hosts-ad-blocker)](https://github.com/OpenSourceVision/hosts-ad-blocker/releases/latest)
+[![下载次数](https://img.shields.io/github/downloads/OpenSourceVision/hosts-ad-blocker/total)](https://github.com/OpenSourceVision/hosts-ad-blocker/releases)
 
 自动聚合多个优质来源的 hosts 广告屏蔽规则，每12小时自动更新，为您提供最新最全面的广告屏蔽体验。
 
