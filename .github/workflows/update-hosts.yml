@@ -2,8 +2,8 @@ name: Update Hosts Rules
 
 on:
   schedule:
-    # 每12小时运行一次 (UTC时间: 00:00 和 12:00)
-    - cron: '0 0 * * *'
+    # 每天12点运行一次 (上海时间12:00 对应 UTC时间04:00)
+    - cron: '0 4 * * *'
   push:
     branches: [ main, master ]
   workflow_dispatch: # 允许手动触发
@@ -65,13 +65,13 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add -A
-        git commit -m "🔄 自动更新 hosts 规则 - $(date '+%Y-%m-%d %H:%M:%S UTC')"
+        git commit -m "🔄 自动更新 hosts 规则 - $(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S CST')"
         git push
     
     - name: Get current date
       if: steps.changes.outputs.changed == 'true'
       id: date
-      run: echo "date=$(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_OUTPUT
+      run: echo "date=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S CST')" >> $GITHUB_OUTPUT
     
     - name: Create Release
       if: steps.changes.outputs.changed == 'true'
