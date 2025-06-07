@@ -4,7 +4,7 @@
 [![最新版本](https://img.shields.io/github/v/release/OpenSourceVision/hosts-ad-blocker)](https://github.com/OpenSourceVision/hosts-ad-blocker/releases/latest)
 [![下载次数](https://img.shields.io/github/downloads/OpenSourceVision/hosts-ad-blocker/total)](https://github.com/OpenSourceVision/hosts-ad-blocker/releases)
 
-自动聚合多个优质来源的 hosts 广告屏蔽规则，每天0点自动更新，为您提供最新最全面的广告屏蔽体验。**特别针对中文网站进行了优化增强！**
+自动聚合多个优质来源的 hosts 广告屏蔽规则，每天12点自动更新，为您提供最新最全面的广告屏蔽体验。**特别针对中文网站进行了优化增强！**
 
 ## ✨ 特性
 
