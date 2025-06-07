@@ -1,4 +1,4 @@
-# Hosts Ad Blocker 🚫🔒 (中文增强版)
+# Hosts Ad Blocker 
 
 [![更新状态](https://github.com/OpenSourceVision/hosts-ad-blocker/workflows/Update%20Hosts%20Rules/badge.svg)](https://github.com/OpenSourceVision/hosts-ad-blocker/actions)
 [![最新版本](https://img.shields.io/github/v/release/OpenSourceVision/hosts-ad-blocker)](https://github.com/OpenSourceVision/hosts-ad-blocker/releases/latest)
