@@ -3,7 +3,7 @@ name: Update Hosts Rules
 on:
   schedule:
     # 每天12点运行一次 (上海时间12:00 对应 UTC时间04:00)
-    - cron: '0 4 * * *'
+    - cron: '0 4 * * 0'
   push:
     branches: [ main, master ]
   workflow_dispatch: # 允许手动触发
